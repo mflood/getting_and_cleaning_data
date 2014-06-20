@@ -9,59 +9,31 @@ Here is what the script does:
 
 2. Downloads the url and saves it in the DATA_DIR into the zip_filename provided then it unzips it in the same direttory
 
+3. For both the test and the training data set, it loads the 3 data files (the subject file, the activity label file, and the signal measurements file) into data frames
 
-3.  Loads a file from the downloaded data set into a data frame takes the subdirectory name ('test' or 'train') and the name of the file within that folder
+4. These 3 data frames are then processed to create the cleaned-up data frame. This is done for both the 3 training frames and the 3 test frames
+   the processing works as follows
+ 
+    First, we grab the names of the activies from the activity_labels.,txt file in the root of the extracted folder
+    and we lookup these names based on the IDs in the activity label dta frame 
+    We replace the V1 and V2 column names with 'activity_id' and 'activity_name'
 
+    In the subject data frame, we replace the "V1" column name with "subject_id"
 
-
-
-# takes 3 data frames as input: the signal data frame,
-# the label data frame and the subject data frame
-# combines all frames into one data frame that 
-# has the subject, the activity and the values of the signals for 
-# all features
-func_combine_data_frames <- function(signal_df, label_df, subject_df) {
-
-    # add a column to label_df showing the string-version of the activity 
-    # by looking up the activity name by id in activity_labels.txt file
-
-    # give the columns in label_df more appropriate names
-
-    # give the column in subject_df a more appropriate name
-
-    # Extract just the features we need for the assignment - std() and mean()
-    #
-    # load the feature filename file containing column names of the signal data frame
-
-
-    # get the indexes of the feature names like 'std()' and 'mean()'
-    # strip out just those columns from signal_df
+    In the signal feature measuremeng data frame, we want to just keep the columns matching "std" or "mean"
+    to do this, we load the feature filename file (features.txt) containing column names of the signal data frame,
+    and get the indexes of the feature names like 'std()' and 'mean()'
+    Using those indexes, we can reference the explicit colimns from the signal data frame 
     
-    # name the columns from the actual names of the features
-    #
-    # clean up the column names , get rid of "()"
-    # and convert all '-' to '_'
-    # set the column names
+    Replace the "V1", "V2", etc.. column names with the actual names of the features that we grabbed from features.txt, 
+    but cleaned up - the "()" are stipped out from the columns names, and '-' are converted to '_'.
 
-    # combine all the data frames together
-}
+    Once all the individual data frames are cleaned up, we merge them together by aligning the columns from each set using cbind.
+    
 
-# make sure data directory exists and create if it doesn't
-func_init_data_dir()
+5. Now that we have cleaned up and assembled test data frame (test_df) and training data frame (train_df), we merge them together by appending train_df to test_df
 
-# download the zipfile and extract it
-func_download_and_extract("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip", "data.zip")
+6. The tidy data set is created by grouping by subject_id and activity_name and calculating the mean() of all the feature-signal-measurement columns
 
-# Load test frame
-
-# load train frame
-
-# merge the two frames: the train data frame (train_df) is appended to the test data frame (test_df)
-
-# create the tiny data set
-# by grouping by subject_id and activity_id
-# and calculating the mean of all the feature data
-
-
-# the data frame is then written out to a file names "tidy.txt"
+7. Finally, we write the tidy data frame out to a file
 
