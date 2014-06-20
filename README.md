@@ -1,9 +1,7 @@
 getting_and_cleaning_data
 =========================
 
-Data Science Coursera
-
-Here is what the script does:
+Here is what the script (run_analysis.R) does:
 
 1. Creates the data directory if it does not already exist
 
